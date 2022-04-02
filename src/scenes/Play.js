@@ -1,12 +1,12 @@
 import Guy from '../entities/Guy';
 
 class Play extends Phaser.Scene {
-    constructor (config) {
+    constructor () {
         super({ key: 'play' });
         this.guys = [];
     }
 
-    create (config) {
+    create () {
         this.add.image(0, 0, 'background').setOrigin(0, 0);
         this.guys.push(new Guy(this, 100));
     }
