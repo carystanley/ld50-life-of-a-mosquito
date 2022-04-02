@@ -1,9 +1,17 @@
 import Guy from '../entities/Guy';
 
+const LIFEBAR_X = 15;
+const LIFEBAR_Y = 5;
+const LIFEBAR_MARGIN = 1;
+const LIFEBAR_HEIGHT = 5;
+const LIFEBAR_WIDTH = 40;
+const LIFE_MAX = 20;
+
 class Play extends Phaser.Scene {
     constructor () {
         super({ key: 'play' });
         this.guys = [];
+        this.life = LIFE_MAX;
     }
 
     create () {
@@ -14,6 +22,24 @@ class Play extends Phaser.Scene {
         this.guys.push(new Guy(this, 100));
 
         this.startGame();
+    }
+
+    update (time, delta) {
+        this.guys.forEach((guy) => {
+            guy.update(time, delta)
+        });
+        this.updateLifeBar();
+    }
+
+    startGame () {
+        this.timerLabel.visible = true;
+        this.timerText.visible = true;
+        this.levelLabel.visible = true;
+    }
+
+    updateLifeBar() {
+        const percent = this.life / LIFE_MAX;
+        this.lifeBar.width = percent * LIFEBAR_WIDTH;
     }
 
     setupHUD() {
@@ -37,18 +63,25 @@ class Play extends Phaser.Scene {
         this.levelLabel = this.add.bitmapText(LEVEL_X, LEVEL_Y, 'boxy_bold_8');
         this.levelLabel.setText('Level 1');
         this.levelLabel.visible = false;
-    }
 
-    startGame () {
-        this.timerLabel.visible = true;
-        this.timerText.visible = true;
-        this.levelLabel.visible = true;
-    }
-
-    update (time, delta) {
-        this.guys.forEach((guy) => {
-            guy.update(time, delta)
-        });
+        this.lifeContainer = this.add.rectangle(
+            LIFEBAR_X - LIFEBAR_MARGIN,
+            LIFEBAR_Y - LIFEBAR_MARGIN,
+            LIFEBAR_WIDTH + (LIFEBAR_MARGIN * 2),
+            LIFEBAR_HEIGHT + (LIFEBAR_MARGIN * 2),
+            0x000000
+        );
+        this.lifeContainer.setOrigin(0, 0);
+        this.hud.add(this.lifeContainer);
+        this.lifeBar = this.add.rectangle(
+            LIFEBAR_X,
+            LIFEBAR_Y,
+            LIFEBAR_WIDTH,
+            LIFEBAR_HEIGHT,
+            0xff0000
+        );
+        this.lifeBar.setOrigin(0, 0);
+        this.hud.add(this.lifeBar);
     }
 }
 
