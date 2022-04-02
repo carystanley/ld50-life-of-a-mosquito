@@ -24,7 +24,22 @@ class Preloader extends Phaser.Scene {
     }
 
     create () {
+        this.setupAnimations([
+            { key: 'guyBody-run', image: 'guyBody', start: 0, end: 3, frameRate: 10, repeat: -1 },
+        ]);
+
         this.scene.start('play');
+    }
+
+    setupAnimations(animations) {
+        animations.forEach(({ key, image, start, end, frameRate, repeat }) => {
+            this.anims.create({
+                key,
+                frames: this.anims.generateFrameNumbers(image, { start, end }),
+                frameRate,
+                repeat
+            });
+        })
     }
 }
 

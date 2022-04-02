@@ -3,12 +3,17 @@ const BODY_Y = 77;
 
 class Guy {
     constructor (scene, x) {
-        this.headSprite = scene.add.sprite(x, HEAD_Y, 'guyHead')
-        this.bodySprite = scene.add.sprite(x, BODY_Y, 'guyBody')
+        this.speed = 10;
+
+        this.headSprite = scene.physics.add.sprite(x, HEAD_Y, 'guyHead');
+
+        this.bodySprite = scene.physics.add.sprite(x, BODY_Y, 'guyBody');
+        this.bodySprite.play('guyBody-run');
+        this.bodySprite.setVelocityX(this.speed);
     }
 
     update (time, delta) {
-
+        this.headSprite.x = this.bodySprite.x;
     }
 }
 
