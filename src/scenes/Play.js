@@ -129,6 +129,8 @@ class Play extends Phaser.Scene {
         this.levelLabel.setText(`Level ${this.level}`);
         this.levelLabel.visible = false;
 
+        const blood = this.add.image(3, 3, 'blood').setOrigin(0, 0);
+        this.hud.add(blood);
         this.lifeContainer = this.add.rectangle(
             LIFEBAR_X - LIFEBAR_MARGIN,
             LIFEBAR_Y - LIFEBAR_MARGIN,
