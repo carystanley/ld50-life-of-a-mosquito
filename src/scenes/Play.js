@@ -10,11 +10,20 @@ const LIFE_MAX = 20;
 
 const WORLD_BOUNDS_MARGIN = 10;
 
+const LEVELUP_SECOUNDS = 5;
+
+function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const secounds = Math.floor(time % 60);
+    return (minutes + ':' + (secounds + '').padStart(2, '0'));
+}
+
 class Play extends Phaser.Scene {
     constructor () {
         super({ key: 'play' });
         this.guys = [];
         this.life = LIFE_MAX;
+        this.level = 1;
     }
 
     create () {
@@ -32,21 +41,38 @@ class Play extends Phaser.Scene {
         this.guys.push(new Guy(this, 100));
         this.player = new Mosquito(this, 40, 40);
 
-        this.startGame();
+        this.startTime = undefined;
     }
 
     update (time, delta) {
+        if (!this.startTime) {
+            this.startGame(time);
+        }
+
         this.guys.forEach((guy) => {
             guy.update(time, delta)
         });
         this.player.update(time, delta);
         this.updateLifeBar();
+        this.timerText.setText(formatTime((time - this.startTime) / 1000));
     }
 
-    startGame () {
+    startGame (time) {
+        this.startTime = time;
         this.timerLabel.visible = true;
         this.timerText.visible = true;
         this.levelLabel.visible = true;
+
+        this.levelupTimer = this.time.addEvent({
+            delay: LEVELUP_SECOUNDS * 1000,
+            callback: () => { this.updateLevel(); },
+            loop: true
+        })
+    }
+
+    updateLevel() {
+        this.level++;
+        this.levelLabel.setText(`Level ${this.level}`);
     }
 
     updateLifeBar() {
@@ -66,14 +92,14 @@ class Play extends Phaser.Scene {
         this.timerLabel.visible = false;
         this.hud.add(this.timerLabel);
         this.timerText = this.add.bitmapText(TIMER_X + 40, TIMER_Y, 'boxy_bold_8');
-        this.timerText.setText('0:00');
+        this.timerText.setText(formatTime(0));
         this.timerText.visible = false;
         this.hud.add(this.timerText);
 
         const LEVEL_X = 4;
         const LEVEL_Y = 80;
         this.levelLabel = this.add.bitmapText(LEVEL_X, LEVEL_Y, 'boxy_bold_8');
-        this.levelLabel.setText('Level 1');
+        this.levelLabel.setText(`Level ${this.level}`);
         this.levelLabel.visible = false;
 
         this.lifeContainer = this.add.rectangle(

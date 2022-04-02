@@ -4,14 +4,18 @@ const BODY_Y = 77;
 const WORLD_BOUNDS_MARGIN = 30;
 
 class Guy {
-    constructor (scene, x, direction = 1) {
+    constructor (scene, x, direction = 1, level = 1) {
         this.scene = scene;
+        this.level = level;
         this.speed = 10;
         this.direction = direction;
         this.angry = false;
         this.blind = false;
 
         this.headSprite = scene.physics.add.sprite(x, HEAD_Y, 'guyHead');
+        this.headSprite.setDrag(10, 10)
+            .setSize(28, 30)
+            .setOffset(6, 4);
 
         this.bodySprite = scene.physics.add.sprite(x, BODY_Y, 'guyBody');
         this.bodySprite.play('guyBody-run');
@@ -32,6 +36,11 @@ class Guy {
 
         /* Keep Head on */
         this.headSprite.x = this.bodySprite.x;
+    }
+
+    levelUp () {
+        this.level++;
+        this.speed = 10 * this.level;
     }
 
     think () {
