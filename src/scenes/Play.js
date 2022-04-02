@@ -73,6 +73,13 @@ class Play extends Phaser.Scene {
     updateLevel() {
         this.level++;
         this.levelLabel.setText(`Level ${this.level}`);
+        this.guys.forEach((guy) => {
+            guy.levelUp();
+        });
+        if ((this.level % 3) == 0) {
+            const randomSide = Phaser.Math.Between(0, 1);
+            this.guys.push(new Guy(this, randomSide ? -20 : 360 + 20));
+        }
     }
 
     updateLifeBar() {

@@ -29,7 +29,7 @@ class Preloader extends Phaser.Scene {
     create () {
         this.setupAnimations([
             { key: 'guyBody-run', image: 'guyBody', start: 0, end: 3, frameRate: 10, repeat: -1 },
-            { key: 'mosquito-fly', image: 'mosquito', start: 0, end: 1, frameRate: 10, repeat: -1 }
+            { key: 'mosquito-fly', image: 'mosquito', start: 0, end: 1, frameRate: 20, repeat: -1 }
         ]);
 
         this.scene.start('play');

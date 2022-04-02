@@ -13,6 +13,7 @@ class Mosquito {
             .setSize(16, 10)
             .setOffset(9, 5)
             .setCollideWorldBounds(true);
+        this.sprite.depth = 10;
 
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.keys = scene.input.keyboard.addKeys('W,S,A,D');

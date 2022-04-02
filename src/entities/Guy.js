@@ -38,12 +38,13 @@ class Guy {
         this.headSprite.x = this.bodySprite.x;
     }
 
-    levelUp () {
+    levelUp() {
         this.level++;
-        this.speed = 10 * this.level;
+        this.speed = 5 * this.level;
+        this.updateSprite();
     }
 
-    think () {
+    think() {
 
     }
 
