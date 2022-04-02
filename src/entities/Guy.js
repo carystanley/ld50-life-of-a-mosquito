@@ -1,5 +1,7 @@
 const HEAD_Y = 57;
 const BODY_Y = 77;
+const SPRAY_Y = 73;
+const SPRAY_X_OFFEST = 16;
 
 const WORLD_BOUNDS_MARGIN = 30;
 
@@ -19,6 +21,9 @@ class Guy {
 
         this.bodySprite = scene.physics.add.sprite(x, BODY_Y, 'guyBody');
         this.bodySprite.play('guyBody-run');
+
+        this.bugSprayImage = this.scene.add.image(0, SPRAY_Y, 'bugspray');
+
         this.updateSprite();
         this.updateThinking(1500);
     }
@@ -36,6 +41,7 @@ class Guy {
 
         /* Keep Head on */
         this.headSprite.x = this.bodySprite.x;
+        this.bugSprayImage.x = this.bodySprite.x + (SPRAY_X_OFFEST * this.direction);
     }
 
     levelUp() {
