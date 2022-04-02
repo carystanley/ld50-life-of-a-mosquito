@@ -128,6 +128,7 @@ class Play extends Phaser.Scene {
         this.levelLabel = this.add.bitmapText(LEVEL_X, LEVEL_Y, 'boxy_bold_8');
         this.levelLabel.setText(`Level ${this.level}`);
         this.levelLabel.visible = false;
+        this.hud.add(this.levelLabel);
 
         const blood = this.add.image(3, 3, 'blood').setOrigin(0, 0);
         this.hud.add(blood);

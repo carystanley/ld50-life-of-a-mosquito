@@ -23,6 +23,7 @@ class Guy {
         this.bodySprite.play('guyBody-run');
 
         this.bugSprayImage = this.scene.add.image(0, SPRAY_Y, 'bugspray');
+        // this.bugSprayImage.setFrame(1);
 
         this.updateSprite();
         this.updateThinking(1500);
