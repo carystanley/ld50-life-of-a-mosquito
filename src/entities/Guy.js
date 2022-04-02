@@ -4,11 +4,11 @@ const BODY_Y = 77;
 const SPRAYCAN_Y = 73;
 const SPRAYCAN_X_OFFEST = 16;
 
-const SPRAY_Y = 64;
-const SPRAY_X_OFFEST = 42;
+const SPRAY_Y = 66;
+const SPRAY_X_OFFEST = 20;
+const SPRAYUP_Y = 64;
+const SPRAYUP_X_OFFEST = 12;
 
-const SPRAYUP_Y = 46;
-const SPRAYUP_X_OFFEST = 30;
 
 const WORLD_BOUNDS_MARGIN = 30;
 
@@ -33,16 +33,26 @@ class Guy {
 
         this.bugSprayImage = scene.add.image(0, SPRAYCAN_Y, 'bugspray');
 
-        this.sprayImage = scene.add.image(0, SPRAY_Y, 'spray');
-        this.sprayImage.visible = false;
-        this.sprayUpImage = scene.add.image(0, SPRAYUP_Y, 'spray');
-        this.sprayUpImage.visible = false;
+        this.sprayParticles = scene.add.particles('sprayParticle');
+        this.sprayParticles.createEmitter({
+            // frame: 'blue',
+            x: 0,
+            y: 0,
+            lifespan: 150,
+            speed: { min: 200, max: 400 },
+            angle: { min: -20, max: 20 },
+            // gravityY: 300,
+            scale: { start: 0.6, end: 0.3 },
+            quantity: 1,
+            blendMode: 'ADD'
+        });
 
         this.updateSprite();
         this.updateThinking(1500);
     }
 
     update () {
+        const { aimUp } = this;
         const { width: gameWidth } = this.scene.game.config;
         /* Handle Bounds */
         if (this.bodySprite.x > gameWidth - WORLD_BOUNDS_MARGIN) {
@@ -56,8 +66,7 @@ class Guy {
         /* Keep Head on */
         this.headSprite.x = this.bodySprite.x;
         this.bugSprayImage.x = this.bodySprite.x + (SPRAYCAN_X_OFFEST * this.direction);
-        this.sprayImage.x = this.bodySprite.x + (SPRAY_X_OFFEST * this.direction);
-        this.sprayUpImage.x = this.bodySprite.x + (SPRAYUP_X_OFFEST * this.direction);
+        this.sprayParticles.x = this.bodySprite.x + ((aimUp ? SPRAYUP_X_OFFEST : SPRAY_X_OFFEST) * this.direction);
     }
 
     levelUp() {
@@ -67,8 +76,8 @@ class Guy {
     }
 
     think() {
-        this.aimUp = Phaser.Math.Between(0, 1) === 0;
-        this.spraying = Phaser.Math.Between(0, 1) === 0;
+        this.aimUp = true; // Phaser.Math.Between(0, 1) === 0;
+        this.spraying = true; // Phaser.Math.Between(0, 1) === 0;
         this.updateSprite();
     }
 
@@ -79,14 +88,14 @@ class Guy {
         this.bodySprite.setFlipX(flip);
         this.headSprite.setFlipX(flip);
         this.bugSprayImage.setFlipX(flip);
-        this.sprayImage.setFlipX(flip);
-        this.sprayUpImage.rotation = -3.14/4 * this.direction;
-        this.sprayUpImage.setFlipX(flip);
 
-        this.sprayImage.visible = !aimUp && spraying;
-        this.sprayUpImage.visible = aimUp && spraying;
         this.bugSprayImage.setFrame(aimUp ? 1 : 0);
-
+        this.sprayParticles.y = aimUp ? SPRAYUP_Y : SPRAY_Y;
+        this.sprayParticles.setAngle(
+            flip ?
+               (aimUp ? 225 : 180) :
+               (aimUp ? 315 : 0)
+        );
     }
 
     updateThinking(delay) {

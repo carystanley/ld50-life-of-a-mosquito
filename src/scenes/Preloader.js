@@ -8,7 +8,7 @@ class Preloader extends Phaser.Scene {
 
         this.load.image('background', 'background.png');
         this.load.image('blood', 'blood.png');
-        this.load.image('spray', 'spray.png');
+        this.load.image('sprayParticle', 'spray-particle.png');
         this.load.spritesheet('bugspray', 'bugspray.png', { frameWidth: 20, frameHeight: 20 });
         this.load.spritesheet('guyBody', 'guy-body.png', { frameWidth: 38, frameHeight: 20 });
         this.load.spritesheet('guyHead', 'guy-head.png', { frameWidth: 38, frameHeight: 38 });
