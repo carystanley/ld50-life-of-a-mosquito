@@ -1,6 +1,8 @@
 const HEAD_Y = 57;
 const BODY_Y = 77;
 
+const WORLD_BOUNDS_MARGIN = 30;
+
 class Guy {
     constructor (scene, x, direction = 1) {
         this.scene = scene;
@@ -18,11 +20,12 @@ class Guy {
     }
 
     update () {
+        const { width: gameWidth } = this.scene.game.config;
         /* Handle Bounds */
-        if (this.bodySprite.x > 340) {
+        if (this.bodySprite.x > gameWidth - WORLD_BOUNDS_MARGIN) {
             this.direction = -1;
             this.updateSprite();
-        } else if (this.bodySprite.x < 20) {
+        } else if (this.bodySprite.x < WORLD_BOUNDS_MARGIN) {
             this.direction = 1;
             this.updateSprite();
         }
