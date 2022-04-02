@@ -1,3 +1,5 @@
+import CoolDowns from '../utils/CoolDowns';
+
 const accelerationX = 400;
 const accelerationY = 400;
 
@@ -5,6 +7,8 @@ class Mosquito {
     constructor (scene, x, y) {
         this.scene = scene;
         this.direction = 1;
+        this.cooldowns = new CoolDowns();
+
         this.sprite = scene.physics.add.sprite(x, y, 'mosquito');
         this.sprite.play('mosquito-fly');
 
@@ -19,8 +23,10 @@ class Mosquito {
         this.keys = scene.input.keyboard.addKeys('W,S,A,D');
     }
 
-    update () {
+    update (time, delta) {
         const { cursors, keys, sprite } = this;
+
+        this.cooldowns.update(delta);
 
         if (cursors.left.isDown || keys.A.isDown) {
             sprite.setAccelerationX(-accelerationX);
@@ -38,6 +44,13 @@ class Mosquito {
             sprite.setAccelerationY(accelerationY);
         } else {
             sprite.setAccelerationY(0);
+        }
+    }
+
+    drink() {
+        if (!this.cooldowns.has('drink')) {
+            this.cooldowns.set('drink', 1000);
+            this.scene.updateLife(3);
         }
     }
 }

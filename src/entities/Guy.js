@@ -69,6 +69,10 @@ class Guy {
             this.thinkTimer = this.scene.time.addEvent(timerConfig);
         }
     }
+
+    getHead() {
+        return this.headSprite;
+    }
 }
 
 export default Guy;

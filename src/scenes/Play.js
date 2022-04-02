@@ -39,8 +39,14 @@ class Play extends Phaser.Scene {
 
         this.setupHUD();
 
-        this.guys.push(new Guy(this, 100));
+        this.headsGroup = this.add.group();
+
         this.player = new Mosquito(this, 40, 40);
+        this.addGuy();
+
+        this.physics.add.overlap(this.player.sprite, this.headsGroup, () => {
+            this.player.drink();
+        });
 
         this.startTime = undefined;
     }
@@ -78,14 +84,21 @@ class Play extends Phaser.Scene {
             guy.levelUp();
         });
         if ((this.level % 3) == 0) {
-            const randomSide = Phaser.Math.Between(0, 1);
-            this.guys.push(new Guy(this, randomSide ? -20 : 360 + 20));
+            this.addGuy();
         }
+    }
+
+    addGuy() {
+        const randomSide = Phaser.Math.Between(0, 1);
+        const newGuy = new Guy(this, randomSide ? -20 : 360 + 20);
+        this.guys.push(newGuy);
+        this.headsGroup.add(newGuy.getHead());
     }
 
     updateLife(delta) {
         this.life += delta;
         if (this.life <= 0) {
+            this.life = 0;
             // GAMEOVER
         } else if (this.life > LIFE_MAX) {
             this.life = LIFE_MAX
