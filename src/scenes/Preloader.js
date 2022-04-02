@@ -10,6 +10,8 @@ class Preloader extends Phaser.Scene {
         this.load.spritesheet('guyBody', 'guy-body.png', { frameWidth: 38, frameHeight: 20 });
         this.load.spritesheet('guyHead', 'guy-head.png', { frameWidth: 38, frameHeight: 38 });
 
+        this.load.bitmapFont('boxy_bold_8', 'fonts/boxy_bold_8.png', 'fonts/boxy_bold_8.xml');
+
         let progress = this.add.graphics();
 
         this.load.on('progress', function (value) {

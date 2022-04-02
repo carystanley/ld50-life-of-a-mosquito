@@ -6,6 +6,8 @@ class Guy {
         this.scene = scene;
         this.speed = 10;
         this.direction = direction;
+        this.angry = false;
+        this.blind = false;
 
         this.headSprite = scene.physics.add.sprite(x, HEAD_Y, 'guyHead');
 
