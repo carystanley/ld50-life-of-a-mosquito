@@ -7,6 +7,8 @@ class Preloader extends Phaser.Scene {
         this.load.setPath('assets');
 
         this.load.image('background', 'background.png');
+        this.load.spritesheet('guyBody', 'guy-body.png', { frameWidth: 38, frameHeight: 20 });
+        this.load.spritesheet('guyHead', 'guy-head.png', { frameWidth: 38, frameHeight: 38 });
 
         let progress = this.add.graphics();
 
