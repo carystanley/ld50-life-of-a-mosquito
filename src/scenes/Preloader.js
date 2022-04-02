@@ -9,6 +9,7 @@ class Preloader extends Phaser.Scene {
         this.load.image('background', 'background.png');
         this.load.spritesheet('guyBody', 'guy-body.png', { frameWidth: 38, frameHeight: 20 });
         this.load.spritesheet('guyHead', 'guy-head.png', { frameWidth: 38, frameHeight: 38 });
+        this.load.spritesheet('mosquito', 'mosquito.png', { frameWidth: 33, frameHeight: 20 });
 
         this.load.bitmapFont('boxy_bold_8', 'fonts/boxy_bold_8.png', 'fonts/boxy_bold_8.xml');
 
@@ -28,6 +29,7 @@ class Preloader extends Phaser.Scene {
     create () {
         this.setupAnimations([
             { key: 'guyBody-run', image: 'guyBody', start: 0, end: 3, frameRate: 10, repeat: -1 },
+            { key: 'mosquito-fly', image: 'mosquito', start: 0, end: 1, frameRate: 10, repeat: -1 }
         ]);
 
         this.scene.start('play');

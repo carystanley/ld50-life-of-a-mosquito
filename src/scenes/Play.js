@@ -1,4 +1,5 @@
 import Guy from '../entities/Guy';
+import Mosquito from '../entities/Mosquito';
 
 const LIFEBAR_X = 15;
 const LIFEBAR_Y = 5;
@@ -20,6 +21,7 @@ class Play extends Phaser.Scene {
         this.setupHUD();
 
         this.guys.push(new Guy(this, 100));
+        this.player = new Mosquito(this, 40, 40);
 
         this.startGame();
     }
@@ -28,6 +30,7 @@ class Play extends Phaser.Scene {
         this.guys.forEach((guy) => {
             guy.update(time, delta)
         });
+        this.player.update(time, delta);
         this.updateLifeBar();
     }
 
