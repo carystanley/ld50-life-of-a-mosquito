@@ -11,6 +11,7 @@ const LIFE_MAX = 20;
 const WORLD_BOUNDS_MARGIN = 10;
 
 const LEVELUP_SECOUNDS = 5;
+const HEALTHLOSS_RATE = 0.5/1000;
 
 function formatTime(time) {
     const minutes = Math.floor(time / 60);
@@ -53,7 +54,7 @@ class Play extends Phaser.Scene {
             guy.update(time, delta)
         });
         this.player.update(time, delta);
-        this.updateLifeBar();
+        this.updateLife(-HEALTHLOSS_RATE * delta);
         this.timerText.setText(formatTime((time - this.startTime) / 1000));
     }
 
@@ -82,7 +83,13 @@ class Play extends Phaser.Scene {
         }
     }
 
-    updateLifeBar() {
+    updateLife(delta) {
+        this.life += delta;
+        if (this.life <= 0) {
+            // GAMEOVER
+        } else if (this.life > LIFE_MAX) {
+            this.life = LIFE_MAX
+        }
         const percent = this.life / LIFE_MAX;
         this.lifeBar.width = percent * LIFEBAR_WIDTH;
     }
