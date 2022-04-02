@@ -8,6 +8,8 @@ const LIFEBAR_HEIGHT = 5;
 const LIFEBAR_WIDTH = 40;
 const LIFE_MAX = 20;
 
+const WORLD_BOUNDS_MARGIN = 10;
+
 class Play extends Phaser.Scene {
     constructor () {
         super({ key: 'play' });
@@ -16,7 +18,14 @@ class Play extends Phaser.Scene {
     }
 
     create () {
+        const { width, height } = this.game.config;
         this.add.image(0, 0, 'background').setOrigin(0, 0);
+        this.physics.world.setBounds(
+            WORLD_BOUNDS_MARGIN,
+            WORLD_BOUNDS_MARGIN,
+            width - WORLD_BOUNDS_MARGIN * 2,
+            height - WORLD_BOUNDS_MARGIN * 2
+        );
 
         this.setupHUD();
 

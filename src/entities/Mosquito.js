@@ -10,8 +10,8 @@ class Mosquito {
 
         this.sprite.setDrag(10, 10)
             .setMaxVelocity(100, 100)
-            .setSize(58, 21)
-            .setOffset(8, 18)
+            .setSize(16, 10)
+            .setOffset(9, 5)
             .setCollideWorldBounds(true);
 
         this.cursors = scene.input.keyboard.createCursorKeys();
