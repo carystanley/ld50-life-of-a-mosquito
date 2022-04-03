@@ -23,6 +23,7 @@ class Guy {
         this.blind = false;
         this.aimUp = false;
         this.spraying = false;
+        this.canSpray = false;
 
         this.headSprite = scene.physics.add.sprite(x, HEAD_Y, 'guyHead');
         this.headSprite.setDrag(10, 10)
@@ -33,6 +34,7 @@ class Guy {
         this.bodySprite.play('guyBody-run');
 
         this.bugSprayImage = scene.add.image(0, SPRAYCAN_Y, 'bugspray');
+        this.bugSprayImage.visible = this.canSpray;
 
         const partices = scene.add.particles('sprayParticle');
         this.sprayParticlesEmitter = partices.createEmitter({
@@ -86,6 +88,7 @@ class Guy {
 
     levelUp() {
         this.level++;
+        this.canSpray = this.level > 2;
         this.speed = Math.min(this.speed + 3, 1000);
         this.thinkDelay = Math.max(this.thinkDelay - 50, 300);
         this.updateThinking(this.thinkDelay);
@@ -94,6 +97,10 @@ class Guy {
 
     think() {
         const { x: playerX, y: playerY } = this.scene.getPlayer().getSprite();
+
+        if (!this.canSpray) {
+            return;
+        }
 
         if (Math.sign(playerX - this.getHead().x) !== this.direction) {
             this.direction *= -1;
@@ -125,6 +132,7 @@ class Guy {
         this.headSprite.setFlipX(flip);
         this.bugSprayImage.setFlipX(flip);
 
+        this.bugSprayImage.visible = this.canSpray;
         this.bugSprayImage.setFrame(aimUp ? 1 : 0);
 
         if (spraying) {
