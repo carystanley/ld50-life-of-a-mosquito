@@ -16,6 +16,10 @@ class Preloader extends Phaser.Scene {
         this.load.spritesheet('mosquito', 'mosquito.png', { frameWidth: 33, frameHeight: 20 });
 
         this.load.audio('slurp', ['sfx/slurp.mp3']);
+        this.load.audio('mumble1', ['sfx/mumble1.mp3']);
+        this.load.audio('mumble2', ['sfx/mumble2.mp3']);
+        this.load.audio('mumble3', ['sfx/mumble3.mp3']);
+        this.load.audio('scream', ['sfx/scream.mp3']);
 
         this.load.audio('mainMusic', ['music/sad-memory.mp3']);
 
