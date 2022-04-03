@@ -93,8 +93,8 @@ class Guy {
 
     levelUp() {
         this.level++;
-        this.canSpray = this.level > 2;
-        this.isAngry = this.level > 4;
+        this.canSpray = this.level > 1;
+        this.isAngry = this.level > 2;
         this.speed = Math.min(this.speed + 3, 1000);
         this.thinkDelay = Math.max(this.thinkDelay - 50, 300);
         this.updateThinking(this.thinkDelay);
