@@ -37,8 +37,8 @@ class Guy {
         this.sprayParticlesEmitter = partices.createEmitter({
             x: 5,
             y: 5,
-            lifespan: 600,
-            speed: { min: 50, max: 100 },
+            lifespan: 300,
+            speed: { min: 100, max: 200 },
             angle: { min: -20, max: 20 },
             // gravityY: 300,
             scale: { start: 0.6, end: 0.3 },
