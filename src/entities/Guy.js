@@ -46,6 +46,7 @@ class Guy {
             blendMode: 'ADD',
             deathZone: { type: 'onEnter', source: {
                 contains: (x, y) => {
+                    // Hacky becuase Phaser does not handle paricle collisions
                     var hit = scene.getPlayer().getSprite().body.hitTest(x, y);
                     if (hit) {
                         scene.getPlayer().hurt();
