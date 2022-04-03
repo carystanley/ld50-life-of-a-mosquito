@@ -22,8 +22,9 @@ class Mosquito {
             .setCollideWorldBounds(true);
         this.sprite.depth = 10;
 
-        const partices = scene.add.particles('bloodParticle');
-        this.bloodParticlesEmitter = partices.createEmitter({
+        const particles = scene.add.particles('bloodParticle');
+        particles.depth = 15;
+        this.bloodParticlesEmitter = particles.createEmitter({
             x: 0,
             y: 0,
             lifespan: 500,
@@ -64,10 +65,12 @@ class Mosquito {
         }
 
         // Phaser BUG only setPosition works (can't use x/y)
-        this.bloodParticlesEmitter.setPosition(
-            this.sprite.x + (PARTICLE_OFFSET_X  * this.direction),
-            this.sprite.y + PARTICLE_OFFSET_Y
-        );
+        if (!this.bleed) {
+            this.bloodParticlesEmitter.setPosition(
+                this.sprite.x + (PARTICLE_OFFSET_X  * this.direction),
+                this.sprite.y + PARTICLE_OFFSET_Y
+            );
+        }
     }
 
     drink() {
@@ -92,9 +95,11 @@ class Mosquito {
 
     showBlood() {
         this.bloodParticlesEmitter.start();
+        this.bleed = true;
         this.bloodTimer = this.scene.time.addEvent({
             delay: Phaser.Math.Between(200, 400),
             callback: () => {
+                this.bleed = false;
                 this.bloodParticlesEmitter.stop();
             }
         });
