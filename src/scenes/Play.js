@@ -151,6 +151,10 @@ class Play extends Phaser.Scene {
         this.lifeBar.setOrigin(0, 0);
         this.hud.add(this.lifeBar);
     }
+
+    getPlayer() {
+        return this.player;
+    }
 }
 
 export default Play;

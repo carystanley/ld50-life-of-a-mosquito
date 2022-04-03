@@ -53,6 +53,17 @@ class Mosquito {
             this.scene.updateLife(3);
         }
     }
+
+    hurt() {
+        if (!this.cooldowns.has('hurt')) {
+            this.cooldowns.set('hurt', 100);
+            this.scene.updateLife(-1);
+        }
+    }
+
+    getSprite() {
+        return this.sprite;
+    }
 }
 
 export default Mosquito;

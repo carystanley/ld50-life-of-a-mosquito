@@ -44,7 +44,19 @@ class Guy {
             // gravityY: 300,
             scale: { start: 0.6, end: 0.3 },
             quantity: 1,
-            blendMode: 'ADD'
+            blendMode: 'ADD',
+            deathZone: { type: 'onEnter', source: {
+                contains: (x, y) => {
+                    var hit = scene.getPlayer().getSprite().body.hitTest(
+                        this.sprayParticles.x + x,
+                        this.sprayParticles.y + y
+                    );
+                    if (hit) {
+                        scene.getPlayer().hurt();
+                    }
+                    return hit;
+                }
+            }}
         });
 
         this.updateSprite();
