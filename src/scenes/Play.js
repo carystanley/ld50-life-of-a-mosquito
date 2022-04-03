@@ -67,7 +67,8 @@ class Play extends Phaser.Scene {
             });
             this.player.update(time, delta);
             this.updateLife(-HEALTHLOSS_RATE * delta);
-            this.timerText.setText(formatTime((time - this.startTime) / 1000));
+            this.lastTime = time;
+            this.timerText.setText(formatTime((this.lastTime - this.startTime) / 1000));
         }
     }
 
@@ -112,7 +113,7 @@ class Play extends Phaser.Scene {
         this.life += delta;
         if (this.life <= 0) {
             this.life = 0;
-            // GAMEOVER
+            this.showGameOver();
         } else if (this.life > LIFE_MAX) {
             this.life = LIFE_MAX
         }
@@ -166,12 +167,39 @@ class Play extends Phaser.Scene {
     setupTitle() {
         const { width: gameWidth } = this.game.config;
         const center = gameWidth/2;
+
         this.gameTitle = this.add.container(0, 0);
         this.gameTitle.depth = 40;
         this.gameTitle.setScrollFactor(0);
 
         this.gameTitle.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText('Life').setScale(3).setOrigin(0.5, 1));
         this.gameTitle.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText('of a Mosquito').setOrigin(0.5, 0));
+    }
+
+    showGameOver() {
+        this.playState = 'gameOver';
+        const listSpanTime = formatTime((this.lastTime - this.startTime) / 1000);
+
+        const { width: gameWidth } = this.game.config;
+        const center = gameWidth/2;
+
+        this.gameOver = this.add.container(0, 0);
+        this.gameOver.depth = 40;
+        this.gameOver.setScrollFactor(0);
+
+        const camera = this.cameras.main;
+        const failOverlay = this.add.graphics();
+        failOverlay.fillStyle(0xFF0000);
+        failOverlay.fillRect(0, 0, camera.width, camera.height);
+        failOverlay.depth = 30;
+        failOverlay.setBlendMode(Phaser.BlendModes.MULTIPLY);
+        this.gameOver.add(failOverlay);
+
+        this.gameOver.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText('Game Over').setScale(2).setOrigin(0.5, 1));
+        this.gameOver.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText(`Lifespan ${listSpanTime}`).setOrigin(0.5, 0));
+
+        this.physics.pause();
+        this.time.paused = true;
     }
 
     getPlayer() {
