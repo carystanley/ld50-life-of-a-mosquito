@@ -46,7 +46,7 @@ class Play extends Phaser.Scene {
 
         this.headsGroup = this.add.group();
 
-        this.player = new Mosquito(this, 270, 40);
+        this.player = new Mosquito(this, 240, 40);
 
         this.physics.add.overlap(this.player.getStingerSprite(), this.headsGroup, () => {
             this.player.drink();
