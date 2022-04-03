@@ -48,13 +48,8 @@ class Play extends Phaser.Scene {
 
         this.player = new Mosquito(this, 270, 40);
 
-        this.physics.add.overlap(this.player.sprite, this.headsGroup, (mosquito, head) => {
-            // Hacky Extra Collison Test
-            const x = mosquito.x + (mosquito.flipX ? 16 : -16);
-            const y = mosquito.y;
-            if (head.body.hitTest(x, y)) {
-                this.player.drink();
-            }
+        this.physics.add.overlap(this.player.getStingerSprite(), this.headsGroup, () => {
+            this.player.drink();
         });
 
         this.startTime = undefined;

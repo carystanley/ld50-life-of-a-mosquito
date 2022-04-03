@@ -37,6 +37,9 @@ class Mosquito {
         });
         this.bloodParticlesEmitter.stop();
 
+        this.stingerSprite = scene.physics.add.sprite(x, y, null).setSize(2, 2);
+        this.stingerSprite.visible = false;
+
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.keys = scene.input.keyboard.addKeys('W,S,A,D');
     }
@@ -73,6 +76,11 @@ class Mosquito {
                 this.sprite.y + PARTICLE_OFFSET_Y
             );
         }
+
+        this.stingerSprite.setPosition(
+            this.sprite.x + (PARTICLE_OFFSET_X  * this.direction),
+            this.sprite.y + PARTICLE_OFFSET_Y
+        );
     }
 
     drink() {
@@ -102,6 +110,10 @@ class Mosquito {
 
     getSprite() {
         return this.sprite;
+    }
+
+    getStingerSprite() {
+        return this.stingerSprite;
     }
 
     showBlood() {
