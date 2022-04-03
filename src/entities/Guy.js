@@ -12,6 +12,10 @@ const SPRAYUP_X_OFFEST = 12;
 
 const WORLD_BOUNDS_MARGIN = 30;
 
+const FACE_NORMAL = 0;
+const FACE_ANGRY = 1;
+const FACE_BLINDED = 2;
+
 class Guy {
     constructor (scene, x, direction = 1, level = 1) {
         this.scene = scene;
@@ -24,6 +28,7 @@ class Guy {
         this.aimUp = false;
         this.spraying = false;
         this.canSpray = false;
+        this.isAngry = false;
 
         this.headSprite = scene.physics.add.sprite(x, HEAD_Y, 'guyHead');
         this.headSprite.setDrag(10, 10)
@@ -89,6 +94,7 @@ class Guy {
     levelUp() {
         this.level++;
         this.canSpray = this.level > 2;
+        this.isAngry = this.level > 4;
         this.speed = Math.min(this.speed + 3, 1000);
         this.thinkDelay = Math.max(this.thinkDelay - 50, 300);
         this.updateThinking(this.thinkDelay);
@@ -134,6 +140,11 @@ class Guy {
 
         this.bugSprayImage.visible = this.canSpray;
         this.bugSprayImage.setFrame(aimUp ? 1 : 0);
+
+        this.headSprite.setFrame(
+            this.blinded ? FACE_BLINDED :
+                (this.isAngry ? FACE_ANGRY : FACE_NORMAL)
+        );
 
         if (spraying) {
             this.sprayParticlesEmitter.start();
