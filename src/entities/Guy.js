@@ -90,7 +90,7 @@ class Guy {
 
     think() {
         this.aimUp = Phaser.Math.Between(0, 1) === 0;
-        this.spraying = true; // Phaser.Math.Between(0, 1) === 0;
+        this.spraying = Phaser.Math.Between(0, 1) === 0;
         this.updateSprite();
     }
 
@@ -103,6 +103,12 @@ class Guy {
         this.bugSprayImage.setFlipX(flip);
 
         this.bugSprayImage.setFrame(aimUp ? 1 : 0);
+
+        if (spraying) {
+            this.sprayParticlesEmitter.start();
+        } else {
+            this.sprayParticlesEmitter.stop();
+        }
 
         if (flip) {
             if (aimUp) {
