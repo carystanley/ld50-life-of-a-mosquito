@@ -25,6 +25,7 @@ class Play extends Phaser.Scene {
         this.guys = [];
         this.life = LIFE_MAX;
         this.level = 1;
+        this.playState = 'title';
     }
 
     create () {
@@ -37,44 +38,56 @@ class Play extends Phaser.Scene {
             height - WORLD_BOUNDS_MARGIN * 2
         );
 
+        this.setupTitle();
         this.setupHUD();
 
         this.headsGroup = this.add.group();
 
-        this.player = new Mosquito(this, 40, 40);
-        this.addGuy();
+        this.player = new Mosquito(this, 270, 40);
 
         this.physics.add.overlap(this.player.sprite, this.headsGroup, () => {
             this.player.drink();
         });
 
         this.startTime = undefined;
-    }
 
-    update (time, delta) {
-        if (!this.startTime) {
-            this.startGame(time);
-        }
-
-        this.guys.forEach((guy) => {
-            guy.update(time, delta)
+        this.input.keyboard.once('keydown', () => {
+            this.playState = 'play';
         });
-        this.player.update(time, delta);
-        this.updateLife(-HEALTHLOSS_RATE * delta);
-        this.timerText.setText(formatTime((time - this.startTime) / 1000));
     }
 
-    startGame (time) {
+    update(time, delta) {
+        if (this.playState === 'play') {
+            if (!this.startTime) {
+                this.startGame(time);
+            }
+
+            this.guys.forEach((guy) => {
+                guy.update(time, delta)
+            });
+            this.player.update(time, delta);
+            this.updateLife(-HEALTHLOSS_RATE * delta);
+            this.timerText.setText(formatTime((time - this.startTime) / 1000));
+        }
+    }
+
+    startGame(time) {
         this.startTime = time;
-        this.timerLabel.visible = true;
-        this.timerText.visible = true;
-        this.levelLabel.visible = true;
+        this.hud.visible = true;
+
+        this.tweens.add({
+            targets: this.gameTitle,
+            alpha: { start: 1, to: 0 },
+            duration: 1000,
+            ease: 'Linear'
+        });
 
         this.levelupTimer = this.time.addEvent({
             delay: LEVELUP_SECOUNDS * 1000,
             callback: () => { this.updateLevel(); },
             loop: true
         })
+        this.addGuy();
     }
 
     updateLevel() {
@@ -111,23 +124,21 @@ class Play extends Phaser.Scene {
         this.hud = this.add.container(0, 0);
         this.hud.depth = 40;
         this.hud.setScrollFactor(0);
+        this.hud.visible = false;
 
         const TIMER_X = 290;
         const TIMER_Y = 4;
         this.timerLabel = this.add.bitmapText(TIMER_X, TIMER_Y, 'boxy_bold_8');
         this.timerLabel.setText('Time');
-        this.timerLabel.visible = false;
         this.hud.add(this.timerLabel);
         this.timerText = this.add.bitmapText(TIMER_X + 40, TIMER_Y, 'boxy_bold_8');
         this.timerText.setText(formatTime(0));
-        this.timerText.visible = false;
         this.hud.add(this.timerText);
 
         const LEVEL_X = 4;
         const LEVEL_Y = 80;
         this.levelLabel = this.add.bitmapText(LEVEL_X, LEVEL_Y, 'boxy_bold_8');
         this.levelLabel.setText(`Level ${this.level}`);
-        this.levelLabel.visible = false;
         this.hud.add(this.levelLabel);
 
         const blood = this.add.image(3, 3, 'blood').setOrigin(0, 0);
@@ -150,6 +161,17 @@ class Play extends Phaser.Scene {
         );
         this.lifeBar.setOrigin(0, 0);
         this.hud.add(this.lifeBar);
+    }
+
+    setupTitle() {
+        const { width: gameWidth } = this.game.config;
+        const center = gameWidth/2;
+        this.gameTitle = this.add.container(0, 0);
+        this.gameTitle.depth = 40;
+        this.gameTitle.setScrollFactor(0);
+
+        this.gameTitle.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText('Life').setScale(3).setOrigin(0.5, 1));
+        this.gameTitle.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText('of a Mosquito').setOrigin(0.5, 0));
     }
 
     getPlayer() {
