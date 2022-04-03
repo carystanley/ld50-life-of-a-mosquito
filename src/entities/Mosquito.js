@@ -104,7 +104,7 @@ class Mosquito {
     hurt() {
         if (!this.cooldowns.has('hurt')) {
             this.cooldowns.set('hurt', 100);
-            this.scene.updateLife(-1);
+            this.scene.updateLife(-2);
         }
     }
 
