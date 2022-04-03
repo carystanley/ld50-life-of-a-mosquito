@@ -6,6 +6,8 @@ const accelerationY = 400;
 const PARTICLE_OFFSET_X = 16;
 const PARTICLE_OFFSET_Y = 3;
 
+const MUMBLE_CHANCE = 3;
+
 class Mosquito {
     constructor (scene, x, y) {
         this.scene = scene;
@@ -79,6 +81,15 @@ class Mosquito {
             this.cooldowns.set('drink', 500);
             this.scene.updateLife(1.5);
             this.showBlood();
+
+            if (Phaser.Math.Between(1, MUMBLE_CHANCE) === 1) {
+                this.scene.time.addEvent({
+                    delay: Phaser.Math.Between(400, 600),
+                    callback: () => {
+                        this.scene.sound.play('mumble' + Phaser.Math.Between(1, 3));
+                    }
+                })
+            }
         }
     }
 
