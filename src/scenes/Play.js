@@ -22,13 +22,14 @@ function formatTime(time) {
 class Play extends Phaser.Scene {
     constructor () {
         super({ key: 'play' });
+    }
+
+    create () {
         this.guys = [];
         this.life = LIFE_MAX;
         this.level = 1;
         this.playState = 'title';
-    }
 
-    create () {
         const { width, height } = this.game.config;
         this.add.image(0, 0, 'background').setOrigin(0, 0);
         this.physics.world.setBounds(
@@ -197,6 +198,18 @@ class Play extends Phaser.Scene {
 
         this.gameOver.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText('Game Over').setScale(2).setOrigin(0.5, 1));
         this.gameOver.add(this.add.bitmapText(center, 45, 'boxy_bold_8').setText(`Lifespan ${listSpanTime}`).setOrigin(0.5, 0));
+        const retryText = this.add.bitmapText(center, 60, 'boxy_bold_8').setText('Press Any Key to Retry').setOrigin(0.5, 0);
+        retryText.alpha = 0;
+        this.gameOver.add(retryText);
+
+        setTimeout(() => {
+            retryText.alpha = 1;
+            this.input.keyboard.once('keydown', () => {
+                this.physics.resume();
+                this.time.paused = false;
+                this.scene.restart();
+            });
+        }, 2000);
 
         this.physics.pause();
         this.time.paused = true;
