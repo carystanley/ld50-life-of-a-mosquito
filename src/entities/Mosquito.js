@@ -3,6 +3,9 @@ import CoolDowns from '../utils/CoolDowns';
 const accelerationX = 400;
 const accelerationY = 400;
 
+const PARTICLE_OFFSET_X = 16;
+const PARTICLE_OFFSET_Y = 3;
+
 class Mosquito {
     constructor (scene, x, y) {
         this.scene = scene;
@@ -19,6 +22,18 @@ class Mosquito {
             .setCollideWorldBounds(true);
         this.sprite.depth = 10;
 
+        const partices = scene.add.particles('bloodParticle');
+        this.bloodParticlesEmitter = partices.createEmitter({
+            x: 0,
+            y: 0,
+            lifespan: 500,
+            speed: { min: 10, max: 20 },
+            gravityY: 100,
+            scale: { start: 0.6, end: 0.3 },
+            quantity: 0.5,
+        });
+        this.bloodParticlesEmitter.stop();
+
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.keys = scene.input.keyboard.addKeys('W,S,A,D');
     }
@@ -31,9 +46,11 @@ class Mosquito {
         if (cursors.left.isDown || keys.A.isDown) {
             sprite.setAccelerationX(-accelerationX);
             sprite.setFlipX(false);
+            this.direction = -1;
         } else if (cursors.right.isDown || keys.D.isDown) {
             sprite.setAccelerationX(accelerationX);
             sprite.setFlipX(true);
+            this.direction = 1;
         } else {
             sprite.setAccelerationX(0);
         }
@@ -45,6 +62,12 @@ class Mosquito {
         } else {
             sprite.setAccelerationY(0);
         }
+
+        // Phaser BUG only setPosition works (can't use x/y)
+        this.bloodParticlesEmitter.setPosition(
+            this.sprite.x + (PARTICLE_OFFSET_X  * this.direction),
+            this.sprite.y + PARTICLE_OFFSET_Y
+        );
     }
 
     drink() {
@@ -52,6 +75,7 @@ class Mosquito {
             this.scene.sound.play('slurp');
             this.cooldowns.set('drink', 1000);
             this.scene.updateLife(3);
+            this.showBlood();
         }
     }
 
@@ -65,6 +89,17 @@ class Mosquito {
     getSprite() {
         return this.sprite;
     }
+
+    showBlood() {
+        this.bloodParticlesEmitter.start();
+        this.bloodTimer = this.scene.time.addEvent({
+            delay: Phaser.Math.Between(200, 400),
+            callback: () => {
+                this.bloodParticlesEmitter.stop();
+            }
+        });
+    }
+
 }
 
 export default Mosquito;
