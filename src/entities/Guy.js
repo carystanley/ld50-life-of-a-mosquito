@@ -59,6 +59,12 @@ class Guy {
                     if (hit) {
                         scene.getPlayer().hurt();
                     }
+
+                    scene.guys.forEach((guy) => {
+                        if ((guy !== this) && guy.getHead().body.hitTest(x, y)) {
+                            guy.onSprayed();
+                        }
+                    });
                     return hit;
                 }
             }}
@@ -104,6 +110,12 @@ class Guy {
     think() {
         const { x: playerX, y: playerY } = this.scene.getPlayer().getSprite();
 
+        if (this.blinded) {
+            this.spraying = false;
+            this.blinded = Math.max(0, this.blinded - 1);
+            return;
+        }
+
         if (!this.canSpray) {
             return;
         }
@@ -131,8 +143,13 @@ class Guy {
     }
 
     updateSprite() {
-        const { aimUp, spraying } = this;
-        this.bodySprite.setVelocityX(this.speed * this.direction);
+        let { aimUp, spraying, speed } = this;
+
+        if (this.blinded) {
+            speed *= 2;
+        }
+
+        this.bodySprite.setVelocityX(speed * this.direction);
         const flip = this.direction !== 1;
         this.bodySprite.setFlipX(flip);
         this.headSprite.setFlipX(flip);
@@ -179,6 +196,14 @@ class Guy {
             this.thinkTimer.reset(timerConfig);
         } else {
             this.thinkTimer = this.scene.time.addEvent(timerConfig);
+        }
+    }
+
+    onSprayed() {
+        if (!this.blinded) {
+            this.blinded = Phaser.Math.Between(2, 4);
+            this.scene.sound.play('scream');
+            this.updateSprite();
         }
     }
 
