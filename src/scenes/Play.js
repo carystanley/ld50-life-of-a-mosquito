@@ -13,6 +13,8 @@ const WORLD_BOUNDS_MARGIN = 10;
 const LEVELUP_SECOUNDS = 5;
 const HEALTHLOSS_RATE = 0.5/1000;
 
+const MAX_GUYS = 6;
+
 function formatTime(time) {
     const minutes = Math.floor(time / 60);
     const secounds = Math.floor(time % 60);
@@ -103,7 +105,7 @@ class Play extends Phaser.Scene {
         this.guys.forEach((guy) => {
             guy.levelUp();
         });
-        if ((this.level % 3) == 0) {
+        if (((this.level % 3) === 0) && (this.guys.length < MAX_GUYS)) {
             this.addGuy();
         }
     }

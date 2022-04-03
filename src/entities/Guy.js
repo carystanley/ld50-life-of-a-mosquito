@@ -17,6 +17,7 @@ class Guy {
         this.scene = scene;
         this.level = level;
         this.speed = 10;
+        this.thinkDelay = 1500;
         this.direction = direction;
         this.angry = false;
         this.blind = false;
@@ -57,7 +58,7 @@ class Guy {
         });
 
         this.updateSprite();
-        this.updateThinking(1500);
+        this.updateThinking(this.thinkDelay);
     }
 
     update () {
@@ -85,13 +86,34 @@ class Guy {
 
     levelUp() {
         this.level++;
-        this.speed = 5 * this.level;
+        this.speed = Math.min(this.speed + 3, 1000);
+        this.thinkDelay = Math.max(this.thinkDelay - 50, 300);
+        this.updateThinking(this.thinkDelay);
         this.updateSprite();
     }
 
     think() {
-        this.aimUp = Phaser.Math.Between(0, 1) === 0;
-        this.spraying = Phaser.Math.Between(0, 1) === 0;
+        const { x: playerX, y: playerY } = this.scene.getPlayer().getSprite();
+
+        if (Math.sign(playerX - this.getHead().x) !== this.direction) {
+            this.direction *= -1;
+            this.spraying = false;
+            this.updateSprite();
+            return;
+        }
+
+        const mosquitoIsUp = playerY < 45;
+        if (mosquitoIsUp !== this.aimUp) {
+            this.aimUp = mosquitoIsUp;
+            this.spraying = false;
+            this.updateSprite();
+            return;
+        }
+
+        if (!this.spraying) {
+            this.spraying = true;
+        }
+
         this.updateSprite();
     }
 

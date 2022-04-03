@@ -76,8 +76,8 @@ class Mosquito {
     drink() {
         if (!this.cooldowns.has('drink')) {
             this.scene.sound.play('slurp');
-            this.cooldowns.set('drink', 1000);
-            this.scene.updateLife(3);
+            this.cooldowns.set('drink', 500);
+            this.scene.updateLife(1.5);
             this.showBlood();
         }
     }
