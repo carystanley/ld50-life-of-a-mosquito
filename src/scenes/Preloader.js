@@ -17,6 +17,8 @@ class Preloader extends Phaser.Scene {
 
         this.load.audio('slurp', ['sfx/slurp.mp3']);
 
+        this.load.audio('mainMusic', ['music/sad-memory.mp3']);
+
         this.load.bitmapFont('boxy_bold_8', 'fonts/boxy_bold_8.png', 'fonts/boxy_bold_8.xml');
 
         let progress = this.add.graphics();

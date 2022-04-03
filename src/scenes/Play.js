@@ -97,6 +97,14 @@ class Play extends Phaser.Scene {
             loop: true
         })
         this.addGuy();
+
+        this.music = this.sound.add('mainMusic');
+        this.music.play({
+            mute: false,
+            volume: 0.5,
+            loop: true,
+            delay: 0
+        });
     }
 
     updateLevel() {
