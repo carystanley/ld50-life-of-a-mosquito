@@ -10,8 +10,8 @@ const LIFE_MAX = 20;
 
 const WORLD_BOUNDS_MARGIN = 10;
 
-const LEVELUP_SECOUNDS = 5;
-const HEALTHLOSS_RATE = 0.5/1000;
+const LEVELUP_SECOUNDS = 10;
+const HEALTHLOSS_RATE = 0.3/1000;
 
 const MAX_GUYS = 6;
 
