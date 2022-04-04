@@ -18,7 +18,7 @@ class Mosquito {
         this.sprite.play('mosquito-fly');
 
         this.sprite.setDrag(10, 10)
-            .setMaxVelocity(100, 100)
+            .setMaxVelocity(100, 60)
             .setSize(16, 10)
             .setOffset(9, 5)
             .setCollideWorldBounds(true);
